@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .button {
+              border: none;
+              color: white;
+              width: 140px;
+              height: 40px;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 10px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+            </style>
+        <title> Decentralized Manufacturing Unit
+        </title>
+    </head>
+    <!-- background color: #2A2C3F-->
+    <body style="background-color: #2A2C3F">
+        <h1 style="text-align: center; color:white; font-family: 'Luminari', fantasy;">Welcome to trade using DMU</h1>
+        <div style="text-align:left">
+            <button class="button" id="approve" style="background-color: #C87539">Approve</button>
+            <input type="text" id="approveText1" placeholder="address" style="height:25px; margin: 4px 2px;">
+            <input type="text" id="approveText1" placeholder="tokens" style="height:25px; margin: 4px 2px;"><br>
+            <p id="approveresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="approveTo" style="background-color: #B84040">Approve to</button>
+            <input type="text" id="approveToText" placeholder="address" style="height:25px; margin: 4px 2px;"></br>
+            <p id="approveToresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="register" style="background-color: #C87539">Register</button>
+            <input type="text" id="registerText" placeholder="1 for agent/ 2 for retailer" style="height:25px; margin: 4px 2px;"><br>
+            <p id="registerresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="returnProduct" style="background-color: #B84040">Return Product</button>
+            <input type="text" id="returnProductText1" placeholder="agent address" style="height:25px; margin: 4px 2px;">
+            <input type="text" id="returnProductText2" placeholder="items" style="height:25px; margin: 4px 2px;"></br>
+            <p id="returnProductresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="reward" style="background-color:  #B84040">Reward</button>
+            <input type="text" id="rewardText" placeholder="retailer address" style="height:25px; margin: 4px 2px;"><br>
+            <p id="reqardresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="transfer" style="background-color:  #B84040">Transfer</button>
+            <input type="text" id="transferText1" placeholder="address" style="height:25px; margin: 4px 2px;">
+            <input type="text" id="transferText2" placeholder="tokens" style="height:25px; margin: 4px 2px;"></br>
+            <p id="transferresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="transferFrom" style="background-color:  #B84040">Transfer from</button>
+            <input type="text" id="transferFromText1" placeholder="from address" style="height:25px; margin: 4px 2px;">
+            <input type="text" id="transferFromText2" placeholder="to address" style="height:25px; margin: 4px 2px;">
+            <input type="text" id="transferFromText3" placeholder="tokens" style="height:25px; margin: 4px 2px;"><br>
+            <p id="transferFromresult" style="color:white; margin:0 0 10px 65px"></p> 
+
+            <button class="button" id="allowance" style="background-color:  #355F7D">Allowance</button>
+            <input type="text" id="allowanceText1" placeholder="from address" style="height:25px; margin: 4px 2px;">
+            <input type="text" id="allowanceText2" placeholder="to address" style="height:25px; margin: 4px 2px;"></br>
+            <p id="allowanceresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="availabilityAt" style="background-color:  #355F7D">Availability at </button>
+            <input type="text" id="availabilityAtText" placeholder="agent address" style="height:25px; margin: 4px 2px;"><br>
+            <p id="availabilityAtresult" style="color:white; margin:0 0 10px 65px"></p>
+
+            <button class="button" id="balanceOf" style="background-color:  #355F7D">balance of</button>
+            <input type="text" id="balanceOfText" placeholder="address" style="height:25px; margin: 4px 2px;"></br>
+            <p id="balanceOfresult" style="color:white; margin:0 0 10px 65px"></p>
+
+
+            <button class="button" id="decimals" style="background-color:  #355F7D">Decimals</button>
+			<p id="decresult"  style="color:white; margin:0 0 10px 65px"></p>
+            <button class="button" id="name" style="background-color: #355F7D">Name of smart contract</button></br>
+            <p id="nameresult" style="color:white; margin:0 0 10px 65px"></p>
+            <button class="button" id="symbol" style="background-color:#355F7D">Symbol</button></br>
+            <p id="symbolresult" style="color:white; margin:0 0 10px 65px"></p>
+            <button class="button" id="totalSupply" style="background-color: #355F7D">Total supply of DMU</button>
+            <p id="totalSupplyresult" style="color:white; margin:0 0 10px 65px"></p>
+        </div>
+		
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="js/dist/bootstrap.min.js"></script>
+		<script src="js/dist/web3.min.js"></script>
+		<script src="js/dist/truffle-contract.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+		<!--script src="js/app.js"></script -->
+        <script>
+            var contract;
+
+            $(document).ready(function(){
+                web3 = new Web3(web3.currentProvider);
+
+                //var address = "0x3D4473e8C5a3D25D0e289eEFc5d2fA4320d15E88";
+                var abi2 = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "total",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "tokenOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenOwner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "add",
+				"type": "address"
+			}
+		],
+		"name": "approveTo",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "agent",
+				"type": "address"
+			}
+		],
+		"name": "availabilityAt",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenOwner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "input",
+				"type": "uint256"
+			}
+		],
+		"name": "register",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "add",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "item",
+				"type": "uint256"
+			}
+		],
+		"name": "returnProduct",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "reward",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	}
+] ;
+                
+                $.getJSON('DMU.json', function(data) {
+					var address = data.networks["5777"].address;
+					var abi = data.abi;
+					contract = new web3.eth.Contract(abi,address);
+                })
+                
+            })
+            $('#reward').click(function(){
+
+                var address = $('#rewardText').val();
+
+                web3.eth.getAccounts().then(function(acc){
+                    return contract.methods.reward(address).send({from: acc[0]});
+                }).then(function(res){
+                        console.log(res);
+                        //$('#approveToresult').html("Registration approved");
+                }).catch(function(err){
+                        $('#rewardresult').html("Reward failed");
+                })
+
+            })
+            $('#returnProduct').click(function(){
+
+                var address = $('#returnProductText1').val();
+                var items = parseInt($('#returnProductText2').val());
+
+                web3.eth.getAccounts().then(function(acc){
+                    return contract.methods.returnProduct(address,items).send({from: acc[0]});
+                }).then(function(res){
+                        $('#returnProductresult').html("Returned "+ items +" Products");
+                }).catch(function(err){
+                        $('#returnProductresult').html("Return did not occur");
+                })
+
+            })
+            $('#approve').click(function(){
+
+                var address = $('#approveText1').val();
+                var input = parseInt($('#approveText2').val());
+
+                web3.eth.getAccounts().then(function(acc){
+                    return contract.methods.approve(address,input).send({from: acc[0]});
+                }).then(function(res){
+                        $('#approveresult').html("Approved ");
+                }).catch(function(err){
+                        $('#approveresult').html("Approval failed");
+                })
+
+            })
+            $('#transfer').click(function(){
+
+                var address = $('#transferText1').val();
+                var input = parseInt($('#transferText2').val());
+
+                web3.eth.getAccounts().then(function(acc){
+                    return contract.methods.transfer(address,input).send({from: acc[0]});
+                }).then(function(res){
+                        $('#transferresult').html("Transferred "+ input);
+                }).catch(function(err){
+                        $('#transferresult').html("Transfer failed");
+                })
+
+            })
+            $('#transferFrom').click(function(){
+
+                var address1 = $('#transferFromText1').val();
+                var address2 = $('#transferFromText2').val();
+                var input = parseInt($('#transferFromText3').val());
+
+                web3.eth.getAccounts().then(function(acc){
+                    return contract.methods.transferFrom(address1,address2,input).send({from: acc[0]});
+                }).then(function(res){
+                        $('#transferFromresult').html("Transferred "+ input);
+                }).catch(function(err){
+                        $('#transferFromresult').html("Transfer failed");
+                })
+
+            })
+            $('#approveTo').click(function(){
+
+                var address = $('#approveToText').val();
+
+                web3.eth.getAccounts().then(function(acc){
+                    return contract.methods.approveTo(address).send({from: acc[0]});
+                }).then(function(res){
+                        $('#approveToresult').html("Registration approved");
+                }).catch(function(err){
+                        $('#approveToresult').html("Registration failed");
+                })
+
+            })
+            $('#register').click(function(){
+
+                var input = parseInt($('#registerText').val());
+
+                web3.eth.getAccounts().then(function(acc){
+                    return contract.methods.register(input).send({from: acc[0]});
+                }).then(function(res){
+                    if(input == 1){
+                        $('#registeresult').html("Manufacturing Agent registered");
+                    } else if(input == 2){
+                        $('#registeresult').html("Retailer registered");
+                    }
+                })
+
+            })
+            $('#allowance').click(function(){
+
+                var address1 = $('#allowanceText1').val();
+                var address2 = $('#allowanceText2').val();
+
+                contract.methods.allowance(address1,address2).call().then(function(al){
+                $('#allowanceresult').html(al);
+                })
+
+            })
+            $('#availabilityAt').click(function(){
+
+                var address = $('#availabilityAtText').val();
+
+                contract.methods.availabilityAt(address).call().then(function(av){
+                $('#availabilityAtresult').html(av);
+                })
+
+            })
+
+            $('#balanceOf').click(function(){
+
+                var address = $('#balanceOfText').val();
+
+                contract.methods.balanceOf(address).call().then(function(bal){
+                $('#balanceOfresult').html(bal);
+                })
+
+            })
+
+            $('#decimals').click(function(){
+
+                contract.methods.decimals().call().then(function(dec){
+                    $('#decresult').html(dec);
+                })
+                
+            })
+
+            $('#name').click(function(){
+
+                contract.methods.name().call().then(function(name){
+                $('#nameresult').html(name);
+                })
+
+            })
+            $('#symbol').click(function(){
+
+                contract.methods.symbol().call().then(function(sym){
+                $('#symbolresult').html(sym);
+                })
+
+            })
+            $('#totalSupply').click(function(){
+
+                contract.methods.totalSupply().call().then(function(sup){
+                $('#totalSupplyresult').html(sup);
+                })
+
+            })
+        </script>
+    </body>
+</html>
